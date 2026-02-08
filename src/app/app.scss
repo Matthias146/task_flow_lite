@@ -1,0 +1,51 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+  background: #0b1020;
+  color: #e6e9f2;
+  font-family: Inter, system-ui, Arial, sans-serif;
+}
+
+.topbar {
+  height: 64px;
+  padding: 0 20px;
+  border-bottom: 1px solid #20263a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #121a2b;
+}
+
+.brand {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.nav {
+  display: flex;
+  gap: 14px;
+
+  a {
+    color: #b9c1d9;
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: 10px;
+    transition: 150ms ease;
+
+    &:hover {
+      background: #1a243b;
+      color: #ffffff;
+    }
+
+    &.active {
+      background: #263556;
+      color: #ffffff;
+    }
+  }
+}
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 20px;
+}
