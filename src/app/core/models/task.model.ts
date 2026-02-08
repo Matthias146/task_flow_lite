@@ -3,3 +3,5 @@ export interface Task {
   title: string;
   done: boolean;
 }
+
+export type Filter = 'all' | 'open' | 'done';

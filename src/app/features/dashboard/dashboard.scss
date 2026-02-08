@@ -36,7 +36,7 @@ p {
   }
 }
 
-button {
+.btn {
   display: inline-block;
   text-decoration: none;
   color: white;
@@ -48,5 +48,15 @@ button {
 
   &:hover {
     background: #4666ff;
+  }
+}
+
+.filter-bar {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+
+  .active {
+    background: #7282cf;
   }
 }
