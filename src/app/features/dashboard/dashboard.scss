@@ -14,3 +14,39 @@ p {
   margin: 0;
   color: #b9c1d9;
 }
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.task-list {
+  margin-top: 24px;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    padding: 12px 0;
+    border-bottom: 1px solid #20263a;
+  }
+}
+
+button {
+  display: inline-block;
+  text-decoration: none;
+  color: white;
+  background: #3557ff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background: #4666ff;
+  }
+}
