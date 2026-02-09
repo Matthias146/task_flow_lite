@@ -15,6 +15,17 @@
     </div>
   </div>
 
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div>
+      <input type="text" formControlName="title" placeholder="add new Task" />
+      @if (titleCtrl.invalid && titleCtrl.touched) {
+        <p class="error">Title must be at least 3 characters</p>
+      }
+      <textarea formControlName="description" placeholder="add description" rows="4"></textarea>
+    </div>
+    <button class="btn" type="submit" [disabled]="form.invalid">Add Task</button>
+  </form>
+
   <div class="filter-bar">
     <button
       class="btn"
@@ -47,6 +58,7 @@
       @for (task of filteredTasks(); track task.id) {
         <li>
           <h3>{{ task.title }}</h3>
+          <p>Description: {{ task.description ? task.description : 'No description' }}</p>
           <p>Status: {{ task.done ? 'Done' : 'Open' }}</p>
           <button class="btn" type="button" (click)="toggleTask(task.id)">
             {{ task.done ? 'Mark as Open' : ' Mark as Done' }}

@@ -1,17 +1,18 @@
 import { Component, computed, signal } from '@angular/core';
 import { Filter, Task } from '../../core/models/task.model';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
 export class DashboardPage {
   tasks = signal<Task[]>([
-    { id: 1, title: 'Task 1', done: false },
-    { id: 2, title: 'Task 2', done: false },
-    { id: 3, title: 'Task 3', done: false },
+    { id: 1, title: 'Task 1', done: false, description: '' },
+    { id: 2, title: 'Task 2', done: false, description: '' },
+    { id: 3, title: 'Task 3', done: false, description: '' },
   ]);
   filter = signal<Filter>('all');
   totalCount = computed(() => this.tasks().length);
@@ -27,6 +28,34 @@ export class DashboardPage {
         return this.tasks();
     }
   });
+
+  form = new FormGroup({
+    title: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(3)],
+    }),
+    description: new FormControl('', { nonNullable: true }),
+  });
+
+  onSubmit() {
+    if (this.form.invalid) return;
+    const { title, description } = this.form.getRawValue();
+    this.tasks.update((tasks) => [
+      ...tasks,
+      {
+        ...this.form.value,
+        id: Math.max(...this.tasks().map((t) => t.id), 0) + 1,
+        title,
+        description,
+        done: false,
+      },
+    ]);
+    this.form.reset({ title: '', description: '' });
+  }
+
+  get titleCtrl() {
+    return this.form.controls.title;
+  }
 
   toggleTask(taskId: number) {
     this.tasks.update((tasks) =>
