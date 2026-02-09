@@ -40,16 +40,10 @@ export class DashboardPage {
   onSubmit() {
     if (this.form.invalid) return;
     const { title, description } = this.form.getRawValue();
-    this.tasks.update((tasks) => [
-      ...tasks,
-      {
-        ...this.form.value,
-        id: Math.max(...this.tasks().map((t) => t.id), 0) + 1,
-        title,
-        description,
-        done: false,
-      },
-    ]);
+    this.tasks.update((tasks) => {
+      const nextId = Math.max(...tasks.map((t) => t.id), 0) + 1;
+      return [...tasks, { id: nextId, title, description, done: false }];
+    });
     this.form.reset({ title: '', description: '' });
   }
 
