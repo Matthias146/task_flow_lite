@@ -1,0 +1,76 @@
+<section class="card">
+  <h1>Dashboard</h1>
+  <div class="stats">
+    <div class="stats-item">
+      <h2>{{ totalCount() }} Tasks</h2>
+      <p>in total</p>
+    </div>
+    <div class="stats-item">
+      <h2>{{ openCount() }} Tasks</h2>
+      <p>open</p>
+    </div>
+    <div class="stats-item">
+      <h2>{{ doneCount() }} Tasks</h2>
+      <p>done</p>
+    </div>
+  </div>
+
+  <form novalidate (ngSubmit)="onSubmit()">
+    <div>
+      <input type="text" placeholder="add new Task" [formField]="addTaskForm.title" />
+      @if (addTaskForm.title().invalid() && addTaskForm.title().touched()) {
+        <p class="error">Title must be at least 3 characters</p>
+      }
+      <textarea
+        placeholder="add description"
+        rows="4"
+        [formField]="addTaskForm.description"
+      ></textarea>
+    </div>
+    <button class="btn" type="submit" [disabled]="addTaskForm().invalid()">Add Task</button>
+  </form>
+
+  <div class="filter-bar">
+    <button
+      class="btn"
+      type="button"
+      (click)="setFilter('all')"
+      [class.active]="filter() === 'all'"
+    >
+      All
+    </button>
+    <button
+      class="btn"
+      type="button"
+      (click)="setFilter('open')"
+      [class.active]="filter() === 'open'"
+    >
+      Open
+    </button>
+    <button
+      class="btn"
+      type="button"
+      (click)="setFilter('done')"
+      [class.active]="filter() === 'done'"
+    >
+      Done
+    </button>
+  </div>
+
+  <div class="task-list">
+    <ul>
+      @for (task of filteredTasks(); track task.id) {
+        <li>
+          <h3>{{ task.title }}</h3>
+          <p>Description: {{ task.description ? task.description : 'No description' }}</p>
+          <p>Status: {{ task.done ? 'Done' : 'Open' }}</p>
+          <button class="btn" type="button" (click)="toggleTask(task.id)">
+            {{ task.done ? 'Mark as Open' : ' Mark as Done' }}
+          </button>
+        </li>
+      } @empty {
+        <li>No tasks found.</li>
+      }
+    </ul>
+  </div>
+</section>
