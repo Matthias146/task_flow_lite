@@ -45,6 +45,7 @@ p {
   border-radius: 10px;
   border: none;
   cursor: pointer;
+  margin-right: 1rem;
 
   &:hover {
     background: #4666ff;
@@ -63,18 +64,18 @@ p {
 
 form {
   margin-top: 24px;
+}
 
-  input,
-  textarea {
-    display: block;
-    width: 100%;
-    margin-bottom: 12px;
-    padding: 12px;
-    border: 1px solid #20263a;
-    border-radius: 10px;
-    background: #121a2b;
-    color: #e6e9f2;
-  }
+input,
+textarea {
+  display: block;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 12px;
+  border: 1px solid #20263a;
+  border-radius: 10px;
+  background: #121a2b;
+  color: #e6e9f2;
 }
 
 .error {
