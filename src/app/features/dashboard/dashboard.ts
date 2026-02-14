@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { Filter, Task } from '../../core/models/task.model';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -9,6 +9,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './dashboard.scss',
 })
 export class DashboardPage {
+  private readonly STORAGE_KEY = 'task-flow-lite.tasks.v1';
   tasks = signal<Task[]>([
     { id: 1, title: 'Task 1', done: false, description: '' },
     { id: 2, title: 'Task 2', done: false, description: '' },
@@ -32,6 +33,17 @@ export class DashboardPage {
         return this.tasks();
     }
   });
+
+  constructor() {
+    this.loadFromLocalStorage();
+    effect(() => {
+      try {
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.tasks()));
+      } catch (error) {
+        console.error('Failed to save tasks to localStorage:', error);
+      }
+    });
+  }
 
   form = new FormGroup({
     title: new FormControl('', {
@@ -115,5 +127,34 @@ export class DashboardPage {
 
   setFilter(nextFilter: Filter) {
     this.filter.set(nextFilter);
+  }
+
+  loadFromLocalStorage() {
+    try {
+      const raw = localStorage.getItem(this.STORAGE_KEY);
+      if (!raw) return;
+
+      const parsed: unknown = JSON.parse(raw);
+      if (!this.isTaskArray(parsed)) return;
+
+      this.tasks.set(parsed);
+    } catch (error) {
+      console.error('Failed to load tasks from localStorage:', error);
+    }
+  }
+  private isTaskArray(value: unknown): value is Task[] {
+    return (
+      Array.isArray(value) &&
+      value.every(
+        (item) =>
+          item &&
+          typeof item === 'object' &&
+          typeof (item as Task).id === 'number' &&
+          typeof (item as Task).title === 'string' &&
+          typeof (item as Task).done === 'boolean' &&
+          (typeof (item as Task).description === 'string' ||
+            typeof (item as Task).description === 'undefined'),
+      )
+    );
   }
 }
