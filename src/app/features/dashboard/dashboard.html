@@ -53,6 +53,8 @@
     </button>
   </div>
 
+  <button class="btn" type="button" (click)="resetDemoData()">Reset Tasks</button>
+
   <div class="task-list">
     <ul>
       @for (task of filteredTasks(); track task.id) {

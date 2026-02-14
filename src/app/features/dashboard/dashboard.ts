@@ -10,11 +10,15 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 })
 export class DashboardPage {
   private readonly STORAGE_KEY = 'task-flow-lite.tasks.v1';
-  tasks = signal<Task[]>([
+  tasks = signal<Task[]>(this.cloneDefaultTasks());
+  private DEFAULT_TASKS: Task[] = [
     { id: 1, title: 'Task 1', done: false, description: '' },
     { id: 2, title: 'Task 2', done: false, description: '' },
     { id: 3, title: 'Task 3', done: false, description: '' },
-  ]);
+  ];
+  private cloneDefaultTasks(): Task[] {
+    return this.DEFAULT_TASKS.map((t) => ({ ...t }));
+  }
   filter = signal<Filter>('all');
   totalCount = computed(() => this.tasks().length);
   openCount = computed(() => this.tasks().filter((task) => !task.done).length);
@@ -65,6 +69,12 @@ export class DashboardPage {
 
   get titleCtrl() {
     return this.form.controls.title;
+  }
+
+  resetDemoData() {
+    this.tasks.set(this.cloneDefaultTasks());
+    this.cancelEdit();
+    this.filter.set('all');
   }
 
   startEdit(task: Task) {
