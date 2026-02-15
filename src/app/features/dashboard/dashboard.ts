@@ -10,12 +10,13 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 })
 export class DashboardPage {
   private readonly STORAGE_KEY = 'task-flow-lite.tasks.v1';
-  tasks = signal<Task[]>(this.cloneDefaultTasks());
   private DEFAULT_TASKS: Task[] = [
     { id: 1, title: 'Task 1', done: false, description: '' },
     { id: 2, title: 'Task 2', done: false, description: '' },
     { id: 3, title: 'Task 3', done: false, description: '' },
   ];
+  tasks = signal<Task[]>(this.cloneDefaultTasks());
+
   private cloneDefaultTasks(): Task[] {
     return this.DEFAULT_TASKS.map((t) => ({ ...t }));
   }
