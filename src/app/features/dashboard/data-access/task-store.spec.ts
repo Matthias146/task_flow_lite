@@ -64,6 +64,22 @@ describe('TaskStore', () => {
     expect(service.editingTaskId()).toBe(1);
   });
 
+  it('should not save edit when title is shorter than 3 characters', () => {
+    const original = service.tasks().find((t) => t.id === 1);
+    expect(original).toBeTruthy();
+
+    service.startEdit(original!);
+    service.setDraftTitle('ab');
+    service.setDraftDescription('changed');
+
+    service.saveEdit(1);
+
+    const after = service.tasks().find((t) => t.id === 1);
+    expect(after?.title).toBe(original!.title);
+    expect(service.editError()).toBe('Title must be at least 3 characters');
+    expect(service.editingTaskId()).toBe(1);
+  });
+
   it('should be created', () => {
     expect(service).toBeTruthy();
   });

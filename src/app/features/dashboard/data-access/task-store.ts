@@ -6,7 +6,7 @@ import { Filter, Task } from '../../../core/models/task.model';
 })
 export class TaskStore {
   private readonly STORAGE_KEY = 'task-flow-lite.tasks.v1';
-  private DEFAULT_TASKS: Task[] = [
+  private readonly DEFAULT_TASKS: Task[] = [
     { id: 1, title: 'Task 1', done: false, description: '' },
     { id: 2, title: 'Task 2', done: false, description: '' },
     { id: 3, title: 'Task 3', done: false, description: '' },
@@ -75,13 +75,27 @@ export class TaskStore {
     this.editError.set('');
   }
 
+  addTask(title: string, description: string) {
+    this.tasks.update((tasks) => {
+      const nextId = Math.max(...tasks.map((t) => t.id), 0) + 1;
+      return [...tasks, { id: nextId, title, description, done: false }];
+    });
+  }
+
   saveEdit(taskId: number) {
     const title = this.draftTitle().trim();
     const description = this.draftDescription();
+
     if (!title) {
       this.editError.set('Title is required');
       return;
     }
+
+    if (title.length < 3) {
+      this.editError.set('Title must be at least 3 characters');
+      return;
+    }
+
     this.tasks.update((tasks) =>
       tasks.map((task) => {
         if (task.id === taskId) {
@@ -90,6 +104,7 @@ export class TaskStore {
         return task;
       }),
     );
+
     this.cancelEdit();
   }
 
@@ -113,7 +128,7 @@ export class TaskStore {
     this.filter.set(nextFilter);
   }
 
-  loadFromLocalStorage() {
+  private loadFromLocalStorage() {
     try {
       const raw = localStorage.getItem(this.STORAGE_KEY);
       if (!raw) return;
