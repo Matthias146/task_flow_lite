@@ -1,14 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomePage } from './home';
+import { provideRouter } from '@angular/router';
 
-describe('Home', () => {
+describe('HomePage', () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HomePage],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HomePage);
