@@ -2,15 +2,15 @@
   <h1>Dashboard</h1>
   <div class="stats">
     <div class="stats-item">
-      <h2>{{ totalCount() }} Tasks</h2>
+      <h2>{{ taskStore.totalCount() }} Tasks</h2>
       <p>in total</p>
     </div>
     <div class="stats-item">
-      <h2>{{ openCount() }} Tasks</h2>
+      <h2>{{ taskStore.openCount() }} Tasks</h2>
       <p>open</p>
     </div>
     <div class="stats-item">
-      <h2>{{ doneCount() }} Tasks</h2>
+      <h2>{{ taskStore.doneCount() }} Tasks</h2>
       <p>done</p>
     </div>
   </div>
@@ -30,62 +30,64 @@
     <button
       class="btn"
       type="button"
-      (click)="setFilter('all')"
-      [class.active]="filter() === 'all'"
+      (click)="taskStore.setFilter('all')"
+      [class.active]="taskStore.filter() === 'all'"
     >
       All
     </button>
     <button
       class="btn"
       type="button"
-      (click)="setFilter('open')"
-      [class.active]="filter() === 'open'"
+      (click)="taskStore.setFilter('open')"
+      [class.active]="taskStore.filter() === 'open'"
     >
       Open
     </button>
     <button
       class="btn"
       type="button"
-      (click)="setFilter('done')"
-      [class.active]="filter() === 'done'"
+      (click)="taskStore.setFilter('done')"
+      [class.active]="taskStore.filter() === 'done'"
     >
       Done
     </button>
   </div>
 
-  <button class="btn" type="button" (click)="resetDemoData()">Reset Tasks</button>
+  <button class="btn" type="button" (click)="taskStore.resetDemoData()">Reset Tasks</button>
 
   <div class="task-list">
     <ul>
-      @for (task of filteredTasks(); track task.id) {
+      @for (task of taskStore.filteredTasks(); track task.id) {
         <li>
-          @if (editingTaskId() === task.id) {
+          @if (taskStore.editingTaskId() === task.id) {
             <input
               #titleInput
               type="text"
-              (input)="setDraftTitle(titleInput.value)"
-              [value]="draftTitle()"
+              (input)="taskStore.setDraftTitle(titleInput.value)"
+              [value]="taskStore.draftTitle()"
             />
             <textarea
               #descriptionInput
               rows="4"
-              (input)="setDraftDescription(descriptionInput.value)"
-              [value]="draftDescription()"
+              (input)="taskStore.setDraftDescription(descriptionInput.value)"
+              [value]="taskStore.draftDescription()"
             ></textarea>
-            <button class="btn" type="button" (click)="saveEdit(task.id)">Save</button>
-            <button class="btn" type="button" (click)="cancelEdit()">Cancel</button>
-            @if (editError()) {
-              <p class="error">{{ editError() }}</p>
+            <button class="btn" type="button" (click)="taskStore.saveEdit(task.id)">Save</button>
+            <button class="btn" type="button" (click)="taskStore.cancelEdit()">Cancel</button>
+            @if (taskStore.editError()) {
+              <p class="error">{{ taskStore.editError() }}</p>
             }
           } @else {
             <h3>{{ task.title }}</h3>
             <p>Description: {{ task.description ? task.description : 'No description' }}</p>
             <p>Status: {{ task.done ? 'Done' : 'Open' }}</p>
-            <button class="btn" type="button" (click)="toggleTask(task.id)">
+            <button class="btn" type="button" (click)="taskStore.toggleTask(task.id)">
               {{ task.done ? 'Mark as Open' : 'Mark as Done' }}
             </button>
-            <button class="btn" type="button" (click)="startEdit(task)">Edit</button>
-            <button class="btn" type="button" (click)="deleteTask(task.id)">Delete</button>
+            <button class="btn" type="button" (click)="taskStore.startEdit(task)">Edit</button>
+            <button class="btn" type="button" (click)="taskStore.deleteTask(task.id)">
+              Delete
+            </button>
           }
         </li>
       } @empty {
