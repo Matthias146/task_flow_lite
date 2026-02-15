@@ -9,8 +9,9 @@ A modern Angular learning project focused on clean architecture, Signals, and jo
 - SCSS
 - pnpm
 - Reactive Forms
-- Angular Signals (`signal`, `computed`)
+- Angular Signals (`signal`, `computed`, `effect`)
 - Husky + lint-staged + Prettier
+- Vitest (Unit Tests)
 
 ## Getting Started
 
@@ -27,10 +28,13 @@ pnpm start
 
 Open http://localhost:4200/.
 
+Run Tests
+pnpm test
+
 Current Features
 	•	App shell with navigation
 	•	Home page
-	•	Dashboard task management (CRUD)
+	•	Dashboard task management (CRUD):
 	•	Add task (Reactive Form + validation)
 	•	Edit task inline (title + description)
 	•	Toggle task status (Open/Done)
@@ -41,6 +45,18 @@ Current Features
 	•	open tasks
 	•	done tasks
 	•	Immutable state updates for all task actions
+	•	localStorage persistence (save + restore)
+	•	Reset demo data action
+
+Unit Tests (Dashboard)
+
+Covered core behavior:
+	•	component creation
+	•	toggle task status
+	•	filter open tasks
+	•	reset demo data
+	•	delete task
+	•	prevent save on invalid edit title
 
 Project Structure
 src/app/
@@ -50,7 +66,7 @@ src/app/
     home/
     dashboard/
 
-    Code Quality
+Code Quality
 	•	Prettier for formatting
 	•	Husky pre-commit hook
 	•	lint-staged on changed files
@@ -65,11 +81,11 @@ Feature-branch based workflow:
 	4.	Push main
 	5.	Delete merged feature branch
 
-  Next Steps
-	•	Persist tasks in localStorage
-	•	Add unit tests for dashboard logic
+Next Steps
 	•	Improve accessibility (labels, keyboard flow, focus states)
-	•	Add small notifications (e.g. save/delete feedback)
+	•	Add user feedback/toasts for actions (save/delete/edit)
+	•	Extract task state logic into a dedicated store/service
+	•	Add more unit tests for edge cases
 
 Author
 
