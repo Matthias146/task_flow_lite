@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TaskStore } from './data-access/task-store';
+import { Task } from '../../core/models/task.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,5 +29,16 @@ export class DashboardPage {
     const { title, description } = this.form.getRawValue();
     this.taskStore.addTask(title, description);
     this.form.reset({ title: '', description: '' });
+  }
+
+  startEdit(task: Task) {
+    this.taskStore.startEdit(task);
+
+    setTimeout(() => {
+      const selector = `input[data-edit-title-id="${task.id}"]`;
+      const el = document.querySelector<HTMLInputElement>(selector);
+      el?.focus();
+      el?.select();
+    }, 0);
   }
 }

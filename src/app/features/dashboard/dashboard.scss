@@ -81,3 +81,10 @@ textarea {
 .error {
   color: red;
 }
+
+.btn:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #7ea1ff;
+  outline-offset: 2px;
+}

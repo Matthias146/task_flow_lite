@@ -17,11 +17,27 @@
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div>
-      <input type="text" formControlName="title" placeholder="add new Task" />
+      <label for="newTitle">Title</label>
+      <input
+        id="newTitle"
+        type="text"
+        formControlName="title"
+        placeholder="add new Task"
+        [attr.aria-invalid]="titleCtrl.invalid && titleCtrl.touched ? 'true' : null"
+        [attr.aria-describedby]="titleCtrl.invalid && titleCtrl.touched ? 'new-title-error' : null"
+      />
       @if (titleCtrl.invalid && titleCtrl.touched) {
-        <p class="error">Title must be at least 3 characters</p>
+        <p id="new-title-error" class="error" aria-live="polite">
+          Title must be at least 3 characters
+        </p>
       }
-      <textarea formControlName="description" placeholder="add description" rows="4"></textarea>
+      <label for="new-description">Description</label>
+      <textarea
+        id="new-description"
+        formControlName="description"
+        placeholder="add description"
+        rows="4"
+      ></textarea>
     </div>
     <button class="btn" type="submit" [disabled]="form.invalid">Add Task</button>
   </form>
@@ -62,9 +78,12 @@
           @if (taskStore.editingTaskId() === task.id) {
             <input
               #titleInput
+              [attr.data-edit-title-id]="task.id"
               type="text"
               (input)="taskStore.setDraftTitle(titleInput.value)"
               [value]="taskStore.draftTitle()"
+              (keydown.enter)="taskStore.saveEdit(task.id)"
+              (keydown.escape)="taskStore.cancelEdit()"
             />
             <textarea
               #descriptionInput
@@ -84,7 +103,7 @@
             <button class="btn" type="button" (click)="taskStore.toggleTask(task.id)">
               {{ task.done ? 'Mark as Open' : 'Mark as Done' }}
             </button>
-            <button class="btn" type="button" (click)="taskStore.startEdit(task)">Edit</button>
+            <button class="btn" type="button" (click)="startEdit(task)">Edit</button>
             <button class="btn" type="button" (click)="taskStore.deleteTask(task.id)">
               Delete
             </button>
