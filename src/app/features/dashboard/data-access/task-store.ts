@@ -1,10 +1,12 @@
-import { computed, effect, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { Filter, Task } from '../../../core/models/task.model';
+import { StorageService } from '../../../core/services/storage-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskStore {
+  private readonly storage = inject(StorageService);
   private readonly STORAGE_KEY = 'task-flow-lite.tasks.v1';
   private readonly DEFAULT_TASKS: Task[] = [
     { id: 1, title: 'Task 1', done: false, description: '' },
@@ -34,11 +36,16 @@ export class TaskStore {
     }
   });
 
+  editTitleInvalid = computed(() => {
+    const title = this.draftTitle().trim();
+    return title.length < 3;
+  });
+
   constructor() {
     this.loadFromLocalStorage();
     effect(() => {
       try {
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.tasks()));
+        this.storage.setJson(this.STORAGE_KEY, this.tasks());
       } catch (error) {
         console.error('Failed to save tasks to localStorage:', error);
       }
@@ -129,17 +136,11 @@ export class TaskStore {
   }
 
   private loadFromLocalStorage() {
-    try {
-      const raw = localStorage.getItem(this.STORAGE_KEY);
-      if (!raw) return;
+    const parsed = this.storage.getJson<unknown>(this.STORAGE_KEY);
+    if (!parsed) return;
+    if (!this.isTaskArray(parsed)) return;
 
-      const parsed: unknown = JSON.parse(raw);
-      if (!this.isTaskArray(parsed)) return;
-
-      this.tasks.set(parsed);
-    } catch (error) {
-      console.error('Failed to load tasks from localStorage:', error);
-    }
+    this.tasks.set(parsed);
   }
   private isTaskArray(value: unknown): value is Task[] {
     return (

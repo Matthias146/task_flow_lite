@@ -93,7 +93,14 @@
               (input)="taskStore.setDraftDescription(descriptionInput.value)"
               [value]="taskStore.draftDescription()"
             ></textarea>
-            <button class="btn" type="button" (click)="taskStore.saveEdit(task.id)">Save</button>
+            <button
+              class="btn"
+              type="button"
+              (click)="taskStore.saveEdit(task.id)"
+              [disabled]="taskStore.editTitleInvalid()"
+            >
+              Save
+            </button>
             <button class="btn" type="button" (click)="taskStore.cancelEdit()">Cancel</button>
             @if (taskStore.editError()) {
               <p [id]="'edit-title-error-' + task.id" class="error" aria-live="polite">
